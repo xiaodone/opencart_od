@@ -1,0 +1,9 @@
+/storage/cache/
+/storage/downlod/*
+/storage/logs/*.log
+/storage/modification/
+/storage/session/sess*
+/storage/upload/*
+*.tar.gz
+/upload/config.php
+/upload/admin/config.php

@@ -1,0 +1,191 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="button" data-toggle="tooltip" title="{{ button_filter }}" onclick="$('#filter-upload').toggleClass('hidden-sm hidden-xs');" class="btn btn-default hidden-md hidden-lg"><i class="fa fa-filter"></i></button>
+		<a href="#" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="添加"><i class="fa fa-plus"></i></a>
+        <!--button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-upload').submit() : false;"><i class="fa fa-trash-o"></i></button-->
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">{% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div id="filter-upload" class="col-md-3 col-md-push-9 col-sm-12 hidden-sm hidden-xs">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-filter"></i> {{ text_filter }}</h3>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="control-label" for="groupid">分组</label>
+			  <select name="groupid" id="groupid" class="form-control">
+			    <option value="">选择分组</option>
+				<option value="1">图案</option>
+				<option value="2">背景</option>
+			  </select>
+            </div>
+            <!--div class="form-group">
+              <label class="control-label" for="input-name">{{ entry_name }}</label>
+              <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="input-date-added">{{ entry_date_added }}</label>
+              <div class="input-group date">
+                <input type="text" name="filter_date_added" value="{{ filter_date_added }}" placeholder="{{ entry_date_added }}" data-date-format="YYYY-MM-DD" id="input-date-added" class="form-control" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                </span></div>
+            </div-->
+            <div class="form-group text-right">
+              <button type="button" id="button-filter" class="btn btn-default"><i class="fa fa-filter"></i> {{ button_filter }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9 col-md-pull-3 col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+          </div>
+          <div class="panel-body">
+            <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-upload">
+              <div class="table-responsive">
+                <table id="diy-upload" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-right">图片</td>
+                      <td class="text-right">分组</td>
+                      <td class="text-right">{{ column_action }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  
+                  {% if uploads %}
+                  {% for upload in uploads %}
+                  <tr>
+                    <td class="text-left"><a href="" id="thumb-image" data-toggle="image"><img src="{{ upload.img }}" alt="" data-placeholder="/image/cache/no_image-100x100.png"/></a></td>
+                    <td class="text-right">{{ upload.group }}</td>
+                    <td class="text-right">
+					<button type="button" data-toggle="tooltip" title="" class="btn btn-danger" onclick="confirm('确认？') ? deleteDiyImage({{ upload.id }}) : false;" data-original-title="删除"><i class="fa fa-trash-o"></i></button></td>
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td class="text-center" colspan="5">{{ text_no_results }}</td>
+                  </tr>
+                  {% endif %}
+                    </tbody>
+					<tfoot>
+						<tr>
+						<td colspan="2"></td>
+						<td class="text-left"><button type="button" onclick="addImage();" data-toggle="tooltip" title="{{ button_image_add }}" class="btn btn-primary"><i class     ="fa fa-plus-circle"></i></button></td>
+					</tr>
+				    </tfoot>
+                </table>
+              </div>
+            </form>
+            <div class="row">
+              <div class="col-sm-6 text-left">{{ pagination }}</div>
+              <div class="col-sm-6 text-right">{{ results }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+  <link href="view/javascript/summernote/summernote.css" rel="stylesheet"/>
+  <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+  <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+  <script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	url = 'index.php?route=tool/diy_upload&user_token={{ user_token }}';
+	
+	var groupid = $('select[name=\'groupid\']').val();
+	
+	if (groupid) {
+		url += '&groupid=' + groupid;
+	}
+	
+	location = url;
+});
+function deleteDiyImage(id){
+	$.ajax({
+		'url' : 'index.php?route=tool/diy_upload/delete&user_token={{ user_token }}&id=' + id,
+		'type' : 'get',
+		'success': function(msg){
+			if('success' == msg){
+				alert('删除成功');
+				window.location.reload();
+			}
+			else{
+				alert('服务异常，请重试');
+			}
+		}
+	});
+}
+function saveUpload(id){
+	var img = $("#input_image" + id).val();
+	var groupid = $("#image_groupid" + id).val();
+	if('' == img){
+		alert('请选择图片');
+		return;
+	}
+	if(groupid < 1){
+		alert('请选择分组');
+		return;
+	}
+	$.ajax({
+		'url':'index.php?route=tool/diy_upload/save&user_token={{ user_token }}',
+		'type':'post',
+		'data':'file=' + img + '&groupid=' +groupid,
+		'success':function(msg){
+			if('success' == msg){
+				alert('保存成功');
+				window.location.reload();
+			}
+			else{
+				alert('保存失败');
+			}
+		}
+	});
+}
+//--></script> 
+  <script type="text/javascript"><!--
+$('.date').datetimepicker({
+	language: '{{ datepicker }}',
+	pickTime: false
+});
+
+var image_row = 1;
+
+function addImage() {
+	html = '<tr id="image-row' + image_row + '">';
+	html += '  <td class="text-left"><a href="" id="thumb-image' + image_row + '"data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" dat     a-placeholder="{{ placeholder }}" /></a><input type="hidden" name="input_image' + image_row + '" value="" id="input_image' + image_row + '" /></td>';
+	html += '  <td class="text-right"><select name="image_groupid' + image_row + '" id="image_groupid' + image_row + '" class="form-control"><option value="">选择分组</option><option value="1">图案</option><option value="2">背景</option></select></td>';
+	html += '  <td class="text-left"><button type="button" onclick="saveUpload(' + image_row + ');" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button></td>';
+	html += '</tr>';
+
+	$('#diy-upload tbody').append(html);
+		image_row++;
+}
+
+//--></script>
+</div>
+{{ footer }}

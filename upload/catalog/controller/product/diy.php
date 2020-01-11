@@ -1,0 +1,13 @@
+<?php
+class ControllerProductDiy extends Controller {
+	public function index() {
+
+		$data['uid'] = $this->session->data['customer_id'];
+		$data['productId'] = (int)$_GET['product_id'];
+
+		$data['footer'] = $this->load->controller('common/footer');
+		$data['header'] = $this->load->controller('common/header');
+
+		$this->response->setOutput($this->load->view('product/diy', $data));
+	}
+}
