@@ -1,5 +1,5 @@
 /storage/cache/
-/storage/downlod/*
+/storage/download/*
 /storage/logs/*.log
 /storage/modification/
 /storage/session/sess*
