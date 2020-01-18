@@ -1,0 +1,309 @@
+<div id="amazonContainer">
+    {% if success %}
+        <div class="success">{{ success }}</div>
+    {% endif %}
+    <h1 class="heading-title">{{ heading_confirm }}</h1>
+    <div class="row">
+        <div class="column">
+            <div class="amazonWidget" id="addressBookWidget"></div>
+        </div>
+        <div class="column">
+            <div class="amazonWidget" id="walletWidget"></div>
+        </div>
+    </div>
+    {% if is_coupon_change_allowed %}
+        <h2 class="secondary-title">{{ text_coupon }}</h2>
+        <p>{{ text_enter_coupon }}</p>
+        <div id="couponContainer">
+            {% if coupon %}
+                <input id="coupon" type="text" disabled value="{{ coupon }}" />
+                <span>
+                    <a id="couponDiscard" href="{{ coupon_discard }}" class="button">X</a>
+                </span>
+            {% else %}
+                <input id="coupon" type="text" value="" />
+                <span>
+                    <a class="button" id="couponApply"><span>{{ button_coupon }}</span></a>
+                </span>
+            {% endif %}
+        </div>
+    {% endif %}
+    <h2 class="secondary-title">{{ text_comments }}</h2>
+    <div class="row">
+        <textarea id="comment">{{ comment }}</textarea>
+    </div>
+    <div class="cart-info">
+        <table>
+            <thead>
+                <tr>
+                    <td class="name">{{ column_name }}</td>
+                    <td class="model">{{ column_model }}</td>
+                    <td class="quantity">{{ column_quantity }}</td>
+                    <td class="price">{{ column_price }}</td>
+                    <td class="total">{{ column_total }}</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for product in order.products %}
+                <tr>
+                    <td class="name">{{ product.name }}
+                        {% for option in product.option %} <br />
+                        <small>- {{ option.name }}: {{ option.value }}</small>
+                        {% endfor %}
+                    </td>
+                    <td class="model">{{ product.model }}</td>
+                    <td class="quantity">{{ product.quantity }}</td>
+                    <td class="price">{{ product.text_price }}</td>
+                    <td class="total">{{ product.text_total }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="cart-total">
+        <table id="total">
+            <tbody>
+            {% for total in order.totals %}
+                <tr>
+                    <td colspan="4" class="price">
+                        <strong>{{ total.title }}</strong>
+                    </td>
+                    <td class="total">{{ total.text }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="attention" id="text-must-apply-coupon" style="display: none;">
+        {{ text_must_apply_coupon }}
+    </div>
+    {% if is_order_total_positive %}
+        {% if is_amount_converted %}
+            <div class="attention">
+                {{ text_amount_converted }}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="attention">
+            {{ error_order_total_zero }}
+        </div>
+    {% endif %}
+    <div class="buttons">
+        <div class="right">
+            {% if is_order_total_positive %}
+                <a class="button" id="confirm-button">{{ text_confirm }}</a>
+            {% else %}
+                <a class="button" href="{{ standard_checkout }}" id="confirm-button">{{ text_continue_checkout }}</a>
+            {% endif %}
+        </div>
+        <div class="left">
+            <a href="{{ back }}" class="button"><span>{{ text_back }}</span></a>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .row {
+        display: flex;
+        justify-content: space-between;
+        margin: 0 -10px;
+    }
+
+    @media (max-width: 767px) {
+        .row {
+            flex-direction: column;
+        }
+    }
+
+    .column {
+        flex-grow: 1;
+        margin: 10px 10px;
+    }
+
+    hr {
+        border-top: 1px solid #ccc;
+        border-bottom: none;
+        margin: 15px 0;
+    }
+
+    .button[disabled] {
+        background-image: none;
+        background-color: #ccc;
+        color: #333;
+        cursor: not-allowed;
+    }
+
+    #amazonContainer {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    #comment {
+        width: 100%;
+        margin: 0 10px;
+        height: 150px;
+    }
+    
+    #coupon {
+        max-width: 240px;
+        font-size: 1.5em;
+        font-family: Courier;
+    }
+
+    .amazonWidget {
+        margin: 0 0 10px 0;
+        width: 100%;
+        height: 230px;
+    }
+</style>
+<script>
+(function($) {
+    var showCouponError = function(message) {
+        $('#couponContainer').before('<div class="warning">' + message + '</div>');
+    }
+
+    var typewatch = (function() {
+        var timer = 0;
+
+        return function(callback) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, 1500);
+        };
+    })();
+
+    $(document).ready(function() {
+        amazon.Login.setClientId('{{ client_id }}');
+
+        new OffAmazonPayments.Widgets.AddressBook({
+            sellerId: '{{ merchant_id }}',
+            amazonOrderReferenceId: '{{ order_reference_id }}',
+            displayMode: "Read",
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function(error) {
+                if (error.getErrorCode() == 'BuyerSessionExpired') {
+                    document.location = '{{ session_expired }}';
+                }
+
+                {% if sandbox %}
+                    console.log("Amazon Login Error for Address (" + error.getErrorCode() + "): " + error.getErrorMessage());
+                {% endif %}
+            }
+        }).bind("addressBookWidget");
+
+        new OffAmazonPayments.Widgets.Wallet({
+            sellerId: '{{ merchant_id }}',
+            amazonOrderReferenceId: '{{ order_reference_id }}',
+            displayMode: "Read",
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function(error) {
+                if (error.getErrorCode() == 'BuyerSessionExpired') {
+                    document.location = '{{ session_expired }}';
+                }
+
+                {% if sandbox %}
+                    console.log("Amazon Login Error for Wallet (" + error.getErrorCode() + "): " + error.getErrorMessage());
+                {% endif %}
+            }
+        }).bind("walletWidget");
+    });
+
+    $(document).on('click', '#couponDiscard', function(e) {
+        if ($(this).is('[disabled]')) {
+            e.preventDefault();
+            return;
+        }
+
+        $('#couponDiscard').attr('disabled', true);
+    });
+
+    $(document).on('click', '#couponApply', function(e) {
+        if ($(this).is('[disabled]')) {
+            e.preventDefault();
+            return;
+        }
+
+        $('#couponApply').attr('disabled', true);
+
+        $('.warning').remove();
+
+        $.ajax({
+            url: '{{ coupon_apply }}',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                coupon: $('#coupon').val()
+            },
+            success: function(data) {
+                if (data.error) {
+                    showCouponError(data.error);
+                    $('#coupon').val('').trigger('input');
+                    $('#couponApply').attr('disabled', false);
+                } else {
+                    document.location = document.location;
+                }
+            }
+        });
+    });
+
+    $(document).on('propertychange input', '#coupon', function() {
+        if ($(this).val() != '') {
+            $('#confirm-button').attr('disabled', true);
+            $('#confirm-button').hide();
+            $('#text-must-apply-coupon').show();
+        } else {
+            $('#confirm-button').attr('disabled', false);
+            $('#confirm-button').show();
+            $('#text-must-apply-coupon').hide();
+        }
+    });
+
+    $(document).on('propertychange input', '#comment', function() {
+        typewatch(() => {
+            $.ajax({
+                url: '{{ persist_comment }}',
+                data: {
+                    comment: $('#comment').val()
+                },
+                type: 'POST'
+            })
+        });
+    });
+
+    var buyNowBtn = document.getElementById("confirm-button");
+    var psd_enabled = {{ psd_enabled }};
+
+    buyNowBtn.addEventListener('click', function () {
+        if(psd_enabled) {
+            OffAmazonPayments.initConfirmationFlow('{{ merchant_id }}', '{{ order_reference_id }}', placeOrder);
+        } else {
+            buyNowBtn.setAttribute("href", '{{ process_us }}');
+        }
+        $(buyNowBtn).button('loading');
+    });
+
+    function placeOrder(amazonPayFlow) {
+        $.ajax({
+            url: '{{ process }}',
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                if(data.redirect) {
+                    document.location = data.redirect;
+                } else if (data.error) {
+                    window.alert(data.error);
+                    amazonPayFlow.error();
+                } else {
+                    amazonPayFlow.success();
+                }
+            },
+            error: function () {
+                amazonPayFlow.error();
+                window.alert('{{ error_unexpected_network_error }}');
+            },
+        });
+    }
+})(jQuery);
+</script>

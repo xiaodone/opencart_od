@@ -1,6 +1,196 @@
+<style>
+  .form-group{
+    margin: auto auto;
+    padding: 0 1em 0 1em;
+  }
+  .red-border-section{                
+    outline: 2px solid red !important;                
+  }
+
+  .bubble_container {
+    position: relative;
+    text-align: center;    
+    overflow: hidden;          
+    padding-bottom: 1em;
+    padding-top: 1em;
+  }
+
+  .bubble_btn{
+    width: inherit;
+    height: 3em;  
+  }
+
+  .bubble_container > .bubble_motion {
+    -moz-transform: translateY(-50%) translateX(-50%);
+    -ms-transform: translateY(-50%) translateX(-50%);
+    -webkit-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    display: unset !important;
+  }
+  .bubble_container > .bubble_motion:before {
+    position: relative;
+    content: '';
+    display: block;
+    margin-top: 100%;
+  }
+  .bubble_container > .bubble_motion:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 50%;
+  }
+
+  .bubble_container > .bubble_motion {
+    -moz-animation: anim-out 0.75s infinite;
+    -webkit-animation: anim-out 0.75s infinite;
+    animation: anim-out 0.75s infinite;
+  }
+  .bubble_container > .bubble_motion:after {
+    -moz-animation: anim-out-pseudo 0.75s infinite;
+    -webkit-animation: anim-out-pseudo 0.75s infinite;
+    animation: anim-out-pseudo 0.75s infinite;
+  }
+
+  @-webkit-keyframes anim-in {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @-moz-keyframes anim-in {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @-ms-keyframes anim-in {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @keyframes anim-in {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @-webkit-keyframes anim-in-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+  @-moz-keyframes anim-in-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+  @-ms-keyframes anim-in-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+  @keyframes anim-in-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+  @-webkit-keyframes anim-out {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @-moz-keyframes anim-out {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @-ms-keyframes anim-out {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @keyframes anim-out {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @-webkit-keyframes anim-out-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+  @-moz-keyframes anim-out-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+  @-ms-keyframes anim-out-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+  @keyframes anim-out-pseudo {
+    0% {
+      background: rgba(0, 0, 0, 0.25);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+</style>
+
 {{ header }}{{ column_left }} 
 <div id="content">
-<div class="page-header">
+<div class="page-header">   
 
     <div class="container-fluid">
       <div class="pull-right">
@@ -49,169 +239,314 @@
             <div class="text-danger">{{ error_name }}</div>
             {% endif %} 
           </div>
-         
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-color">{{ entry_color }}</label>
-            <div class="col-sm-10">
-            <select name="add_color" id="add_color" class="form-control">
-               <option value="">
-            ---Select---
-            </option>
-              {% for optn in option %} 
-              <option value="{{ optn['option_id'] }}" {{ optn['sel'] }} > {{ optn['option'] }}  </option>
-              {% endfor %} 
-            </select>
-              
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-filter">{{ entry_filter }}</label>
-            <div class="col-sm-10">
-            </div>
-          </div>
-          {% set i=1 %}{% for i in i..3 %}            
-          <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-map_filter_color_option">{{ entry_map_color }}</label>
-                <div class="col-sm-4">
-                  <select name='{{ "map_filter_color_option_"~i }}' id="input-map_filter_color_option" class="form-control">
-                   <option value=""  {% if ("" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}> ---Select---</option>
-                   <option value="black" {% if ("black" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Black</option>
-                   <option value="blue"  {% if ("blue" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Blue</option>
-                   <option value="gray"  {% if ("gray" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Gray</option>
-                   <option value="green"  {% if ("green" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Green</option>
-                   <option value="maroon"  {% if ("maroon" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Maroon</option>
-                   <option value="navy"  {% if ("navy" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Navy</option>
-                   <option value="purple"  {% if ("purple" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Purple</option>
-                   <option value="red"  {% if ("red" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Red</option>
-                   <option value="white"  {% if ("white" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>White</option>
-                   <option value="yellow"  {% if ("yellow" == result_color_f[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Yellow</option>
-                  </select>
-                </div>
-            
-                <label class="col-sm-2 control-label" for="input-map_filter_option">{{ entry_map_filter }}</label>
-                <div class="col-sm-4">
-                  <select name='{{ "map_filter_option_"~i }}' id="input-map_filter_option" class="form-control">
-                   <option value="">---Select---</option>
-                 {% for optn in filter %} 
-                 
-                 <option value="{{ optn['filter_id'] }}"  
-                    {% if (result_filter_opt_val_id[i] is defined) %} 
-                      {% if (optn['filter_id'] == result_filter_opt_val_id[i]) %}
-                        {{ optn['sel'] }}
-                      {% endif %}
-                    {% endif %} >                  
-                {{ optn['filter'] }}
-                </option>
-               
+          <div class="pcoi_form_widget">
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-color">{{ entry_color }}</label>
+              <div class="col-sm-10">
+              <select name="add_color" id="add_color" class="form-control">
+                 <option value="">
+              ---Select---
+              </option>
+                {% for optn in option %} 
+                <option value="{{ optn['option_id'] }}" {{ optn['sel'] }} > {{ optn['option'] }}  </option>
                 {% endfor %} 
-                  </select>
-                  
-                </div>
-          </div>
-          {% endfor %}
-
-          <div class="form-group">                                  
-            <div class="text-right col-sm-11"><button type="button" id="add_fil_to_map" data-toggle="modal" data-target="#buy-pro-modal" title="{{ button_option_value_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></div>
-            <div class="text-right col-sm-1"></div>
-          </div>
-                     
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-option_value_ids_to_color_mapping">{{ entry_option_value_ids_to_color_mapping }}</label>
-            <div class="col-sm-10">
-            </div>
-          </div>
-           {% set i=1 %}{% for i in i..3 %} 
-          <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-map_option_value_ids_color_option">{{ entry_map_color }}</label>
-                <div class="col-sm-3">
-                  <select name='{{ "map_option_value_ids_color_option_"~i }}' id="input-map_option_value_ids_color_option" class="form-control">
-                   <option value=""  {% if ("" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}> ---Select---</option>
-                   <option value="black"  {% if ("black" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Black</option>
-                   <option value="blue"  {% if ("blue" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Blue</option>
-                   <option value="gray"  {% if ("gray" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Gray</option>
-                   <option value="green"  {% if ("green" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Green</option>
-                   <option value="maroon"  {% if ("maroon" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Maroon</option>
-                   <option value="navy"  {% if ("navy" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Navy</option>
-                   <option value="purple"  {% if ("purple" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Purple</option>
-                   <option value="red"  {% if ("red" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Red</option>
-                   <option value="white"  {% if ("white" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>White</option>
-                   <option value="yellow"  {% if ("yellow" == result_color[i]) %}
-   {{ 'selected="selected"' }}{% endif %}>Yellow</option>
-                  </select>
-                </div>
-            
-                <label class="col-sm-3 control-label" for="input-map_option_value_ids_option">{{ entry_map_option_value_ids }}</label>
-                <div class="col-sm-4">
-                  <select name='{{"map_option_value_ids_option_"~i }}' id="input-option_value_ids_option" class="form-control">
-                   <option value="">
-                ---Select---
-                </option>
-                {% for optn_value_id in product_option_value %} 
-                  
-                  <option value="{{ optn_value_id['option_value_id'] }}"  
-   {% if (optn_value_id['option_value_id'] == result_product_opt_val_id[i]) %}
-   {{ optn_value_id['sel'] }}{% endif %}
-  >
-                {{ optn_value_id['name'] }}
-                </option>
-               {% endfor %} 
-                  </select>
-                </div>            
-          </div>
-          {% endfor %}
-
-          <div class="form-group">                        
-            <div class="text-right col-sm-11"><button type="button" id="add_col_to_map" data-toggle="modal" data-target="#buy-pro-modal" title="{{ button_option_value_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></div>
-            <div class="text-right col-sm-1"></div>
-          </div>
-          
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-sort_order">{{ entry_sort_order }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="sort_order" value="{{ entry_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-module_code" class="form-control" />
-              
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
-            <div class="col-sm-10">             
-              <select name="module_productcolorbasedimages_status" id="input-status" class="form-control">
-                {% if db_status %}
-                <option value="1" selected="selected">{{ text_enabled }}</option>
-                <option value="0">{{ text_disabled }}</option>
-                {% else %}
-                <option value="1">{{ text_enabled }}</option>
-                <option value="0" selected="selected">{{ text_disabled }}</option>
-                {% endif %}
               </select>
+                
+              </div>
+            </div>
+
+            <div class="form-group">                                              
+              <div class="text-center col-sm-12">
+                <button type="button" id="set_img_locations" title="Set Image Location" class="btn btn-primary">
+                  <span>Select the widget area on product page to help adapting theme</span>
+                </button>
+              </div>            
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-filter">{{ entry_filter }}</label>
+              <div class="col-sm-10">
+              </div>
+            </div>
+            {% set i=1 %}{% for i in i..3 %}            
+            <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-map_filter_color_option">{{ entry_map_color }}</label>
+                  <div class="col-sm-4">
+                    <select name='{{ "map_filter_color_option_"~i }}' id="input-map_filter_color_option" class="form-control">                     
+                      <option value=""  {% if ("" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>---Select---</option>
+                      <option value="black" {% if ("black" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Black</option>
+                      <option value="blue"  {% if ("blue" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Blue</option>
+                      <option value="grey"  {% if ("grey" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Grey</option>
+                      <option value="green"  {% if ("green" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Green</option>
+                      <option value="maroon"  {% if ("maroon" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Maroon</option>
+                      <option value="navy"  {% if ("navy" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Navy</option>
+                      <option value="purple"  {% if ("purple" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Purple</option>
+                      <option value="red"  {% if ("red" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Red</option>
+                      <option value="white"  {% if ("white" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>White</option>
+                      <option value="yellow"  {% if ("yellow" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Yellow</option>
+                      <option value="gold"  {% if ("gold" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Gold</option>
+                      <option value="khaki"  {% if ("khaki" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Khaki</option>
+                      <option value="pink"  {% if ("pink" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Pink</option>
+                      <option value="tampa"  {% if ("tampa" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Tampa</option>
+                      <option value="bordeaux"  {% if ("bordeaux" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Bordeaux</option>
+                      <option value="beige"  {% if ("beige" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Beige</option>
+                      <option value="silver"  {% if ("silver" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Silver</option>
+                      <option value="cypress"  {% if ("cypress" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Cypress</option>
+                      <option value="brown"  {% if ("brown" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Brown</option>
+                      <option value="leopard"  {% if ("leopard" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Leopard</option>
+                      <option value="mustard"  {% if ("mustard" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Mustard</option>
+                      <option value="purple"  {% if ("purple" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Purple</option>
+                      <option value="pourou"  {% if ("pourou" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Pourou</option>
+                      <option value="petrol"  {% if ("petrol" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Petrol</option>
+                      <option value="pine"  {% if ("pine" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Pine</option>
+                      <option value="cigar"  {% if ("cigar" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Cigar</option>
+                      <option value="bordo"  {% if ("bordo" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Bordo</option>
+                      <option value="olive"  {% if ("olive" == result_color_f[i]) %} {{ 'selected="selected"' }}{% endif %}>Olive</option>
+                    </select>
+                  </div>
+              
+                  <label class="col-sm-2 control-label" for="input-map_filter_option">{{ entry_map_filter }}</label>
+                  <div class="col-sm-4">
+                    <select name='{{ "map_filter_option_"~i }}' id="input-map_filter_option" class="form-control">
+                     <option value="">---Select---</option>
+                   {% for optn in filter %} 
+                   
+                   <option value="{{ optn['filter_id'] }}"  
+                      {% if (result_filter_opt_val_id[i] is defined) %} 
+                        {% if (optn['filter_id'] == result_filter_opt_val_id[i]) %}
+                          {{ optn['sel'] }}
+                        {% endif %}
+                      {% endif %} >                  
+                  {{ optn['filter'] }}
+                  </option>
+                 
+                  {% endfor %} 
+                    </select>
+                    
+                  </div>
+            </div>
+            {% endfor %}
+
+            <div class="form-group">                                  
+              <div class="text-right col-sm-11"><button type="button" id="add_fil_to_map" data-toggle="modal" data-target="#buy-pro-modal" title="{{ button_option_value_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></div>
+              <div class="text-right col-sm-1"></div>
+            </div>
+                       
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-option_value_ids_to_color_mapping">{{ entry_option_value_ids_to_color_mapping }}</label>
+              <div class="col-sm-10">
+              </div>
+            </div>
+             {% set i=1 %}{% for i in i..3 %} 
+            <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-map_option_value_ids_color_option">{{ entry_map_color }}</label>
+                  <div class="col-sm-3">
+                    <select name='{{ "map_option_value_ids_color_option_"~i }}' id="input-map_option_value_ids_color_option" class="form-control">
+                     <option value=""  {% if ("" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>---Select---</option>
+                      <option value="black" {% if ("black" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Black</option>
+                      <option value="blue"  {% if ("blue" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Blue</option>
+                      <option value="grey"  {% if ("grey" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Grey</option>
+                      <option value="green"  {% if ("green" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Green</option>
+                      <option value="maroon"  {% if ("maroon" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Maroon</option>
+                      <option value="navy"  {% if ("navy" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Navy</option>
+                      <option value="purple"  {% if ("purple" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Purple</option>
+                      <option value="red"  {% if ("red" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Red</option>
+                      <option value="white"  {% if ("white" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>White</option>
+                      <option value="yellow"  {% if ("yellow" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Yellow</option>
+                      <option value="gold"  {% if ("gold" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Gold</option>
+                      <option value="khaki"  {% if ("khaki" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Khaki</option>
+                      <option value="pink"  {% if ("pink" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Pink</option>
+                      <option value="tampa"  {% if ("tampa" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Tampa</option>
+                      <option value="bordeaux"  {% if ("bordeaux" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Bordeaux</option>
+                      <option value="beige"  {% if ("beige" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Beige</option>
+                      <option value="silver"  {% if ("silver" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Silver</option>
+                      <option value="cypress"  {% if ("cypress" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Cypress</option>
+                      <option value="brown"  {% if ("brown" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Brown</option>
+                      <option value="leopard"  {% if ("leopard" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Leopard</option>
+                      <option value="mustard"  {% if ("mustard" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Mustard</option>
+                      <option value="purple"  {% if ("purple" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Purple</option>
+                      <option value="pourou"  {% if ("pourou" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Pourou</option>
+                      <option value="petrol"  {% if ("petrol" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Petrol</option>
+                      <option value="pine"  {% if ("pine" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Pine</option>
+                      <option value="cigar"  {% if ("cigar" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Cigar</option>
+                      <option value="bordo"  {% if ("bordo" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Bordo</option>
+                      <option value="olive"  {% if ("olive" == result_color[i]) %} {{ 'selected="selected"' }}{% endif %}>Olive</option>
+                    </select>
+                  </div>
+              
+                  <label class="col-sm-3 control-label" for="input-map_option_value_ids_option">{{ entry_map_option_value_ids }}</label>
+                  <div class="col-sm-4">
+                    <select name='{{"map_option_value_ids_option_"~i }}' id="input-option_value_ids_option" class="form-control">
+                     <option value="">
+                  ---Select---
+                  </option>
+                  {% for optn_value_id in product_option_value %} 
+                    
+                    <option value="{{ optn_value_id['option_value_id'] }}"  
+     {% if (optn_value_id['option_value_id'] == result_product_opt_val_id[i]) %}
+     {{ optn_value_id['sel'] }}{% endif %}
+    >
+                  {{ optn_value_id['name'] }}
+                  </option>
+                 {% endfor %} 
+                    </select>
+                  </div>            
+            </div>
+            {% endfor %}
+
+            <div class="form-group">                        
+              <div class="text-right col-sm-11"><button type="button" id="add_col_to_map" data-toggle="modal" data-target="#buy-pro-modal" title="{{ button_option_value_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></div>
+              <div class="text-right col-sm-1"></div>
+            </div>
+            
+             <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-main-img-config">{{ entry_main_img_config }}</label>
+              <div class="col-sm-10">             
+                <select name="module_productcolorbasedimages_main_img_config" id="input-main-img-config" class="form-control">
+                    <option value="1" {% if (1 == module_productcolorbasedimages_main_img_config) %}{{'selected="selected"'}}{% endif %}>{{ text_main_img_no_change }}</option>
+                    
+                    <option value="2" {% if (2 == module_productcolorbasedimages_main_img_config) %}{{'selected="selected"'}}{% endif %}>{{ text_main_img_do_change }}</option>
+                   
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+              <div class="col-sm-10">             
+                <select name="module_productcolorbasedimages_status" id="input-status" class="form-control">                
+                  <option value="0" {% if(0== db_status) %}{{'selected="selected"'}}{% endif %}>{{ text_disabled }}</option>
+                  <option value="1" {% if(1== db_status) %}{{'selected="selected"'}}{% endif %}>{{ text_enabled }}</option>                
+                </select>
+              </div>
             </div>
           </div>
 
+          <div class="pcoi_selection_widget" style="display:none;">
+            <div class="form-group">
+              <label class="col-sm-12">                
+                Click the select buttons below and hover on the page under it to mark the image widget area (If developer then use jQuery selector for quick setup).
+              </label>
+            </div>
+            
+            <div class="form-group">
+              <label class="col-sm-2">Thumbnail Image</label>                              
+              <div class="col-sm-8">
+                <input type="text" class="form-control" name="thumb_image_query" value="{{thumb_image_query}}">
+              </div>
+              <div class="col-sm-2 bubble_container">
+                <div class='bubble_motion'></div>
+                <button type="button" class="btn btn-primary pcoi_selection_btn">Select</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2">Icon Image</label>                              
+              <div class="col-sm-8">
+                <input type="text" class="form-control" name="icon_image_query"  value="{{icon_image_query}}">
+              </div>
+              <div class="col-sm-2 bubble_container">
+                <div class='bubble_motion'></div>
+                <button type="button" class="btn btn-primary pcoi_selection_btn">Select</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-12 text-right">
+                <button type="button" id="pcoi_selection_done" class="btn btn-primary select_container"><span>Close</span></button>
+              <div>              
+            </div>          
+            <br/><br/><br/>
+            <iframe id="product_selection_zone" src="{{base_url}}index.php?route=product/product&product_id={{ product_id }}" style="height:100%; width:100%;"></iframe>
+          </div>
         </form>
       </div>
     </div>
-  </div>
+  <script>
+      jQuery(window).on('load',function(){
+        $=jQuery;
+        $('#pcoi_selection_done').click(function(){
+          $('.pcoi_form_widget').css('display','');
+          $('.pcoi_selection_widget').css('display','none');
+        });
+
+        $('#set_img_locations').click(function(){
+          $('.pcoi_form_widget').css('display','none');
+          $('.pcoi_selection_widget').css('display','');
+        });
+
+        var getUniqueSelector = function (el) {
+              if (!el) { return; }
+              var selectors=Array();            
+              
+              $.each($(el).parents().add($(el)),function(index,element){
+                  
+                  if($(element).length>0){
+
+                      var selector = (element.tagName || '').toLowerCase();
+                      if (element.id) {
+                        selector += '#' + element.id;
+                      }
+                      
+                      for (var i = 0, len = element.attributes.length; i < len; i++) {
+                        if((element.attributes[i].name).trim()=='class'){
+
+                            value=((element.attributes[i].value).replace(/red-border-section/g,'')).trim();  
+                            if(value!=''){
+                                selector += '[' + element.attributes[i].name + '="' + ((element.attributes[i].value).replace(/red-border-section/g,'')).trim() + '"]';    
+                            }
+                        }                    
+                      }
+                      var parent = $(element).parent();
+                      var sameTagSiblings = parent.children(selector);                    
+                      if (sameTagSiblings.length > 1) { 
+                          var allSiblings = parent.children();
+                          var index = allSiblings.index(element) + 1;                        
+                          selector += ':nth-child(' + index + ')';                        
+                      }
+                      selectors.push(selector);
+                  }
+              });
+              return selectors.join('>');
+            };                     
+        
+        document.selection_available=false;
+        $.each($("iframe#product_selection_zone").contents().find("*"),function(){  $(this).off(); })
+        $(document).on('click','.pcoi_selection_btn',function(e){                                
+            document.selection_available=true;
+
+            $('.selected_btn').removeClass('selected_btn');
+            $(this).addClass('selected_btn');                    
+            
+            $("iframe").contents().find("*").each(function() {
+              $(this).off('click');
+            });
+
+            $("iframe").contents().on('mouseenter','*',function(e){
+                if(document.selection_available==true){
+                  $("iframe").contents().find('.red-border-section').removeClass('red-border-section');
+                  $(this).addClass('red-border-section');
+                }
+            });                   
+
+            $("iframe").contents().on('click','.red-border-section',function(e){            
+              $(this).removeClass('red-border-section');
+              e.preventDefault();
+              e.stopPropagation();
+              document.selection_available=false;   
+              $(document).find(".selected_btn").parentsUntil('.pcoi_selection_widget').find('input').val(getUniqueSelector(this)); 
+              alert('Marking done!\nPlease come back here again if images are not changing properly based on color on your actual frontend product page.');
+              return false;
+            });
+            return false;
+        });
+
+        $('iframe').contents().find('body').append('<style>.red-border-section{ outline: 2px solid red !important; }</style>');      
+
+      });
+    </script>
+
+    </div>
 </div>
+
 {{ footer }} 

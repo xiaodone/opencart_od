@@ -1,0 +1,23 @@
+{% if error %} 
+<div class="warning">{{ error }}</div>
+{% endif %} 
+{% if testmode %} 
+  <div class="warning">{{ text_testmode }}</div>
+{% endif %} 
+<form action="{{ action }}" method="post">
+	<input type="hidden" name="CustomerID" value="{{ customer_id }}" />
+	<input type="hidden" name="TransactionCurrency" value="{{ currency_iso }}" />
+	<input type="hidden" name="TransactionAmount" value="{{ total }}" />
+	<input type="hidden" name="CustomerEmail" value="{{ email }}" />
+	<input type="hidden" name="Notes" value="ORDER:{{ order_id }}" />
+	<input type="hidden" name="RedirectorSuccess" value="{{ redirector_success }}" />
+	<input type="hidden" name="RedirectorFailed" value="{{ redirector_failure }}" />
+	<input type="hidden" name="PayPageType" value="4" />
+	<input type="hidden" name="Amount" value="{{ total }}" />
+	<input type="hidden" name="PostCode" value="{{ zip }}" />
+    <div class="buttons">
+      <div class="pull-right">
+        <input type="submit" value="{{ button_confirm }}" class="btn btn-primary" />
+      </div>
+    </div>
+</form>

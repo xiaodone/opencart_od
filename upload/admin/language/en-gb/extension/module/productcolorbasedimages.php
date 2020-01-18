@@ -15,6 +15,10 @@ $_['text_content_top']    = 'Content Top';
 $_['text_content_bottom'] = 'Content Bottom';
 $_['text_column_left']    = 'Column Left';
 $_['text_column_right']   = 'Column Right';
+
+$_['text_main_img_no_change']   = 'Keep main image as it is';
+$_['text_main_img_do_change']   = 'Keep main image and swap with first image of color';
+$_['text_main_img_remove_on']   = 'Remove main image from list';
 // Entry
 $_['entry_name']       = 'Product Color Option Images';
 $_['entry_limit']      = 'Limit';
@@ -30,6 +34,7 @@ $_['entry_layout']        = 'Layout:';
 $_['entry_position']      = 'Position:';
 $_['entry_status']        = 'Status:';
 $_['entry_sort_order']    = 'Sort Order:';
+$_['entry_main_img_config'] = 'Product page main image behavior:';
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify Product Color Option Images!';

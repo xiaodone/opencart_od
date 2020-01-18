@@ -270,7 +270,7 @@ class Cart {
 					'height'          => $product_query->row['height'],
 					'length_class_id' => $product_query->row['length_class_id'],
 					'recurring'       => $recurring,
-					'diy_image'		  => $diy_image,
+					'image_code'		  => $diy_image,
 				);
 			} else {
 				$this->remove($cart['cart_id']);
