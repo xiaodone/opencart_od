@@ -22,9 +22,12 @@
         <div class="{{ class }}"> {% if thumb or images %}
           <ul class="thumbnails">
             {% if thumb %}
-            <li><a class="thumbnail" href="{{ popup }}" title="{{ heading_title }}"><img src="{{ thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
+            <li class="thumbnail-big"><a class="thumbnail" href="{{ popup }}" title="{{ heading_title }}"><img src="{{ thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
             {% endif %}
             {% if images %}
+			{% if thumb %}
+			<li class="image-additional"><a class="thumbnail" href="{{ popup }}" title="{{ heading_title }}"><img src="{{ thumb }}" title="{{ heading_title }}" alt="{{ heading_title}}" /></a></li>
+			{% endif %}
             {% for image in images %}
             <li class="image-additional"><a class="thumbnail" href="{{ image.popup }}" title="{{ heading_title }}"> <img src="{{ image.thumb }}" title="{{ heading_title }}" alt="{{ heading_title }}" /></a></li>
             {% endfor %}
@@ -121,7 +124,7 @@
             <button type="button" data-toggle="tooltip" class="btn btn-default" title="{{ button_compare }}" onclick="compare.add('{{ product_id }}');"><i class="fa fa-exchange"></i></button>
           </div>
           <h1>{{ heading_title }}</h1>
-          <ul class="list-unstyled">
+          <ul class="list-unstyled odm_product_info">
             {% if manufacturer %}
             <li>{{ text_manufacturer }} <a href="{{ manufacturers }}">{{ manufacturer }}</a></li>
             {% endif %}
@@ -135,7 +138,7 @@
           <ul class="list-unstyled">
             {% if not special %}
             <li>
-              <h2>{{ price }}</h2>
+              <h2 class="odm_product_price">{{ price }}</h2>
             </li>
             {% else %}
             <li><span style="text-decoration: line-through;">{{ price }}</span></li>
@@ -542,13 +545,19 @@ $('#button-review').on('click', function() {
 });
 
 $(document).ready(function() {
-	$('.thumbnails').magnificPopup({
+	/*$('.thumbnails').magnificPopup({
 		type:'image',
 		delegate: 'a',
 		gallery: {
 			enabled: true
 		}
 	});
+	*/
+	
+	$('.thumbnail').click(function(){return false;});
+	$('.image-additional .thumbnail > img').click(function(){
+		$('.thumbnail-big .thumbnail > img').attr('src', $(this).parent().attr('href'));	
+		return false;});
 });
 //--></script> 
 {{ footer }} 

@@ -26,7 +26,7 @@ $_['button_back']           = 'Back';
 $_['button_continue']       = 'Continue';
 $_['button_cart']           = 'Add to Cart';
 //add by whr
-$_['button_diy']            = 'Go DIY';
+$_['button_diy']            = 'Customize Now';
 $_['button_cancel']         = 'Cancel';
 $_['button_compare']        = 'Compare this Product';
 $_['button_wishlist']       = 'Add to Wish List';

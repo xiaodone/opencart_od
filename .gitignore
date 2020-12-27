@@ -7,3 +7,7 @@
 *.tar.gz
 /upload/config.php
 /upload/admin/config.php
+.idea/
+/upload/image/catalog/
+/upload/image/cache
+/upload/system/storage/cache

@@ -1,34 +1,42 @@
 <?php
-// Heading
-$_['heading_title'] =  'Login mit Amazon';
+/**
+ * @version		$Id: amazon_login.php 5469 2019-01-08 22:09:26Z mic $
+ * @package		Language Translation German Backend
+ * @author		mic - https://osworx.net
+ * @copyright	2019 OSWorX
+ * @license		GPL - www.gnu.org/copyleft/gpl.html
+ */
 
-//Text
-$_['text_module'] =  'Module';
-$_['text_extension']               = 'Erweiterungen';
-$_['text_success'] =  'Erfolg: Sie haben das Login mit Amazon-Modul geändert.';
-$_['text_content_top'] =  'Inhalt oben';
-$_['text_content_bottom'] =  'Inhalt unten';
-$_['text_column_left'] =  'Spalte links';
-$_['text_column_right'] =  'Spalte rechts';
-$_['text_lwa_button'] =  'Melden Sie sich bei Amazon an';
-$_['text_login_button'] =  'Anmelden';
-$_['text_a_button'] = 'A';
-$_['text_gold_button'] =  'Gold';
-$_['text_darkgray_button'] =  'Dunkelgrau';
-$_['text_lightgray_button'] =  'Hellgrau';
-$_['text_small_button'] =  'Klein';
-$_['text_medium_button'] =  'Mittel';
-$_['text_large_button'] =  'Groß';
-$_['text_x_large_button'] =  'Extragroß';
+// Heading
+$_['heading_title']			= 'Anmelden mit Amazon';
+
+// Text
+$_['text_module']			= 'Module';
+$_['text_extension']		= 'Erweiterungen';
+$_['text_success']			= 'Datensatz erfolgreich bearbeitet';
+$_['text_content_top']		= 'Inhalt Oben';
+$_['text_content_bottom']	= 'Inhalt Unten';
+$_['text_column_left']		= 'Spalte Links';
+$_['text_column_right']		= 'Spalte Rechts';
+$_['text_lwa_button']		= 'Anmelden mit Amazon';
+$_['text_login_button']		= 'Anmelden';
+$_['text_a_button']			= 'ein';
+$_['text_gold_button']		= 'Gold';
+$_['text_darkgray_button']	= 'Dunkelgrau';
+$_['text_lightgray_button']	= 'Hellgrau';
+$_['text_small_button']		= 'Small';
+$_['text_medium_button']	= 'Medium';
+$_['text_large_button']		= 'Large';
+$_['text_x_large_button']	= 'X-Large';
 
 //Entry
-$_['entry_button_type'] =  'Schaltflächentyp';
-$_['entry_button_colour'] = 'Schaltflächenfarbe';
-$_['entry_button_size'] =  'Schaltflächengröße';
-$_['entry_layout'] = 'Layout';
-$_['entry_position'] = 'Position';
-$_['entry_status'] = 'Status';
-$_['entry_sort_order'] =  'Sortierreihenfolge';
+$_['entry_button_type']		= 'Buttonart';
+$_['entry_button_colour']	= 'Buttonfarbe';
+$_['entry_button_size']		= 'Buttongröße';
+$_['entry_layout']			= 'Layout';
+$_['entry_position']		= 'Position';
+$_['entry_status']			= 'Status';
+$_['entry_sort_order']		= 'Reihenfolge';
 
 //Error
-$_['error_permission'] =  'Warnung: Sie haben keine Berechtigung, das Bezahlen mit Amazon-Modul zu ändern.';
+$_['error_permission']		= 'Keine Rechte zum bearbeiten';

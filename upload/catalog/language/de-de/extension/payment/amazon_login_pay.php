@@ -1,46 +1,37 @@
 <?php
+/**
+ * @version		$Id: amazon_login_pay.php 5469 2019-01-08 22:09:26Z mic $
+ * @package		Translation Frontend
+ * @author		mic - https://osworx.net
+ * @copyright	2019 OSWorX
+ * @license		GPL - www.gnu.org/copyleft/gpl.html
+ */
 
-$_['breadcrumb_cart'] = "Warenkorb";
-$_['breadcrumb_payment'] = "Zahlung";
-$_['breadcrumb_shipping'] = "Versand";
-$_['breadcrumb_summary'] = "Zusammenfassung der Bestellung";
-$_['error_constraint_amount_not_set'] = "Die Bestellung ist aufgrund eines technischen Fehlers fehlgeschlagen, bitte wählen Sie eine andere Zahlungsmethode oder kontaktieren Sie unseren Support.";
-$_['error_constraint_payment_method_not_allowed'] = "Die ausgewählte Zahlungsmethode ist für diese Transaktion nicht verfügbar. Bitte wählen Sie eine andere aus oder fügen Sie eine neue Zahlungsmethode hinzu.";
-$_['error_constraint_payment_plan_not_set'] = "Für diese Bestellung wurde kein Zahlungsmittel ausgewählt, bitte versuchen Sie, die Seite zu aktualisieren oder ein neues Zahlungsmittel hinzuzufügen.";
-$_['error_decline_amazon_rejected'] = "Ihre Zahlung konnte nicht bearbeitet werden. Bitte versuchen Sie, die Bestellung erneut mit einer anderen Zahlungsmethode aufzugeben.";
-$_['error_decline_invalid_payment_method'] = "Ihre Zahlung konnte nicht bearbeitet werden, bitte folgen Sie den Anweisungen im Kasten zur Zahlungsmethode.";
-$_['error_decline_processing_failure'] = "Ihre Bestellung konnte aufgrund eines Systemfehlers nicht bearbeitet werden. Bitte versuchen Sie, die Bestellung erneut aufzugeben.";
-$_['error_decline_transaction_timed_out'] = "Ihre Zahlung konnte nicht bearbeitet werden. Bitte versuchen Sie, die Bestellung erneut mit einer anderen Zahlungsmethode aufzugeben.";
-$_['error_login'] = "Login fehlgeschlagen";
-$_['error_login_email'] = "Login fehlgeschlagen: Die E-Mail-Adresse %s stimmt nicht mit der E-Mail-Adresse Ihres Amazon-Kontos überein";
-$_['error_minimum'] = "Der Mindestbestellwert für Amazon Pay und Login mit Amazon beträgt %s!";
-$_['error_no_shipping_methods'] = "Es ist keine Versandoption für die gewählte Adresse verfügbar. Bitte wählen Sie eine andere Lieferadresse aus.";
-$_['error_order_total_zero'] = "Leider akzeptiert Amazon Pay keine Bestellungen mit einem Gesamtbetrag von <strong>%s</strong>. Sie können stattdessen den <strong>Standard-Checkout</strong> verwenden.";
-$_['error_payment_method'] = "Bitte wählen Sie eine Zahlungsmethode aus";
-$_['error_process_order'] = "Es gab einen Fehler bei der Bearbeitung Ihrer Bestellung. Bitte wenden Sie sich an den Shop-Administrator.";
-$_['error_session_expired'] = "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an, indem Sie auf den Amazon Pay-Button klicken.";
-$_['error_shipping'] = "Bitte wählen Sie eine Liefermethode aus";
-$_['error_shipping_address'] = "Bitte wählen Sie eine Lieferadresse aus";
-$_['error_shipping_methods'] = "Es gab einen Fehler beim Abrufen Ihrer Adresse von Amazon. Bitte wenden Sie sich an den Shop-Administrator.";
-$_['heading_address'] = "Bitte wählen Sie eine Lieferadresse aus";
-$_['heading_confirm'] = "Bestellübersicht";
-$_['heading_payment'] = "Bitte wählen Sie eine Zahlungsmethode aus";
-$_['heading_title'] = "Amazon Pay und Login mit Amazon";
-$_['text_amount_converted'] = "Achtung: Der gezahlte Betrag <strong>%s</strong> wird mit einer Konvertierungsrate von <strong>%s</strong> umgewandelt. Der erwartete Transaktionsbetrag wird <strong>%s</strong> sein.";
-$_['text_back'] = "Zurück";
-$_['text_cart'] = "Warenkorb";
-$_['text_confirm'] = "Bestätigen";
-$_['text_continue'] = "Weiter";
-$_['text_continue_checkout'] = "Weiter zur Kasse";
-$_['text_coupon'] = "Gutschein";
-$_['text_enter_coupon'] = "Geben Sie hier Ihren Gutscheincode ein.";
-$_['text_lpa'] = "Amazon Pay und Login mit Amazon";
-$_['text_must_apply_coupon'] = "Bitte geben Sie Ihren Gutscheincode ein.";
-$_['text_payment_success'] = "Ihre Bestellung wurde erfolgreich aufgegeben. Ihre Bestelldaten finden Sie weiter unten";
-$_['text_success_title'] = "Ihre Bestellung wurde erfolgreich aufgegeben!";
-$_['text_tax_other'] = "Steuern / Sonstige Bearbeitungsgebühren";
-$_['error_failure_mfa'] = "Beim Zahlungsvorgang ist ein Problem aufgetreten. Ihre Bestellung wurde nicht aufgegeben und Ihr Konto nicht belastet.";
-$_['error_unexpected_network_error'] = "Unerwarteter Netzwerkfehler";
-$_['error_invaild_request'] = "Ungültige Anfrage, bitte versuchen Sie Ihre Bestellung erneut.";
-$_['error_abandoned_mfa'] = "Mit dieser Zahlungsart ist ein Problem aufgetreten. Um Ihre Bestellung abzuschließen, wählen Sie bitte eine andere aus.";
-$_['text_created_by']     = 'created by iSenseLabs, OpenCart, V%s';
+// Heading
+$_['heading_title']				= 'Anmelden &amp; Bezahlen mit Amazon';
+$_['heading_address']			= 'Bitte Lieferadresse wählen';
+$_['heading_payment']			= 'Bitte Zahlungsart wählen';
+$_['heading_confirm']			= 'Auftragsübersicht';
+
+// Text
+$_['text_back']					= 'Zurück';
+$_['text_cart']					= 'Warenkorb';
+$_['text_confirm']				= 'Kostenpflichtig Bestellen';
+$_['text_continue']				= 'Weiter';
+$_['text_lpa']					= 'Anmelden &amp; Bezahlen mit Amazon';
+$_['text_enter_coupon']			= 'Wenn vorhanden hier Gutscheincode angeben.';
+$_['text_coupon']				= 'Gutschein';
+$_['text_tax_other']			= 'Steuern &amp; andere Gebühren';
+$_['text_success_title']		= 'Die Bestellung wurde gesendet.';
+$_['text_payment_success']		= 'Bestellung erfolgreich bezahlt. Nachstehend die Auftragsdetails';
+
+// Error
+$_['error_payment_method']		= 'Bitte eine Zahlungsart wählen';
+$_['error_shipping']			= 'Bitte eine Versandart wählen';
+$_['error_shipping_address']	= 'Bitte eine Lieferadresse wählen';
+$_['error_shipping_methods']	= 'Leider gab es bei Amazon einen Fehler die Adresse zu holen. Bitte die Shopverwaltung für weitere Hilfe kontaktieren.';
+$_['error_no_shipping_methods'] = 'Für diese Adresse sind keine Versandarten verfügbar, bitte eine andere Adresse angeben.';
+$_['error_process_order']		= 'Leider gab es einen Fehler während der Bearbeitung, bitte die Shopverwaltung kontaktieren.';
+$_['error_login']				= 'Anmeldung fehlgeschlagen';
+$_['error_login_email']			= 'Anmeldung fehlgeschlagen, die Emailadresse <b>%s</b> stimmt nicht mit der bei Amazon hinterlegten überein';
+$_['error_minimum']				= 'Mindestbestellwert für Anmelden und Bezahlen mit Amazon beträgt %s';

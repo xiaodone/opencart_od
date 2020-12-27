@@ -22,13 +22,13 @@ class ControllerApiProduct extends Controller {
 		$data['special'] = $product_info['special'];
 
 		if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
-			$data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+			$data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'],'',false);
 		} else {
-			$data['price'] = false;
+			$data['price'] = 0;
 		}
 
 		if ((float)$product_info['special']) {
-			$data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+			$data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency'],'',false);
 		} else {
 			$data['special'] = false;
 		}
@@ -46,7 +46,7 @@ class ControllerApiProduct extends Controller {
 						if ((($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) && (float)$option_value['price']) {
 							$price = $this->currency->format($this->tax->calculate($option_value['price'], $product_info['tax_class_id'], $this->config->get('config_tax') ? 'P' : false), $this->session->data['currency']);
 						} else {
-							$price = false;
+							$price = 0;
 						}
 
 						$product_option_value_data[] = array(
