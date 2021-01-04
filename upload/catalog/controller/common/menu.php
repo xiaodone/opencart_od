@@ -36,7 +36,7 @@ class ControllerCommonMenu extends Controller {
 					'name'     => $category['name'],
 					'children' => $children_data,
 					'column'   => $category['column'] ? $category['column'] : 1,
-					'href'     => $this->url->link('product/category', 'path=' . $category['category_id'])
+					'href'     => 20 != $category['category_id'] ? $this->url->link('product/category', 'path=' . $category['category_id']) : '/index.php?route=product/diy&product_id=1'
 				);
 			}
 		}

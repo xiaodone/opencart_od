@@ -3,6 +3,7 @@
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h4 class="modal-title">{{ heading_title }}</h4>
+	  <span>{{ directory_str }}</span>
     </div>
     <div class="modal-body">
       <div class="row">
@@ -148,7 +149,7 @@ $('#button-upload').on('click', function() {
 					}
 
 					if (json['success']) {
-						alert(json['success']);
+						//alert(json['success']);
 
 						$('#button-refresh').trigger('click');
 					}
@@ -195,7 +196,7 @@ $('#button-folder').on('shown.bs.popover', function() {
 				}
 
 				if (json['success']) {
-					alert(json['success']);
+					//alert(json['success']);
 
 					$('#button-refresh').trigger('click');
 				}
@@ -226,7 +227,7 @@ $('#modal-image #button-delete').on('click', function(e) {
 				}
 
 				if (json['success']) {
-					alert(json['success']);
+					//alert(json['success']);
 
 					$('#button-refresh').trigger('click');
 				}

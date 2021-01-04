@@ -1,21 +1,27 @@
 <?php
-class ControllerApiCategory extends Controller {
+class ControllerApiBrand extends Controller {
 
 	public function index() {
+
+		if (isset($this->request->get['category'])) {
+            $category_id = (int)$this->request->get['category'];
+        } else {
+            $category_id = 0;
+        }
 
 		$data = array();
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
-		$categorys = $this->model_catalog_category->getCategories();
+		$categorys = $this->model_catalog_category->getCategories($category_id);
 		$data = [];
 		if(!empty($categorys) && is_array($categorys)){
 			foreach($categorys as $category){
 				$tmpdata = [];
 				$tmpdata['id'] = $category['category_id'];
 				$tmpdata['name'] = $category['name'];
-				$tmpdata['icon'] = $category['image'];
+				//$tmpdata['icon'] = $category['image'];
 				/*$tmpdata['products'] = [];
 				$products = $this->model_catalog_product->getProducts(['filter_category_id' => $category['category_id']]);
 				if(!empty($products) && is_array($products)){
@@ -34,7 +40,6 @@ class ControllerApiCategory extends Controller {
 		}
 
 		$this->response->addHeader('Content-Type: application/json');
-		$result = ['status' => 200, 'data' => $data];
-		$this->response->setOutput(json_encode($result));
+		$this->response->setOutput(json_encode($data));
 	}
 }

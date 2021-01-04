@@ -14,7 +14,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
     }
 
     public function verifyShipping() {
-        if (!isset($this->session->data['apalwa']['pay']['shipping_method']) || !isset($this->session->data['apalwa']['pay']['address']) || !isset($this->session->data['shipping_method'])) {
+        if (!isset($this->session->data['apalwa']['pay']['shipping_method']) || !isset($this->session->data['apalwa']['pay']['address'])) {
             $this->response->redirect($this->url->link('extension/payment/amazon_login_pay/address', '', true));
         }
     }
@@ -82,7 +82,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
         }
     }
 
-    public function cartRedirect($message = null, $return_value = false) {
+    public function cartRedirect($message = null) {
         unset($this->session->data['apalwa']['pay']);
         unset($this->session->data['order_id']);
 
@@ -90,11 +90,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
             $this->session->data['error'] = $message;
         }
 
-        if ($return_value) {
-            return $this->url->link('checkout/cart', '', true);
-        } else {
-            $this->response->redirect($this->url->link('checkout/cart', '', true));
-        }
+        $this->response->redirect($this->url->link('checkout/cart', '', true));
     }
 
     public function getTotals(&$total_data) {
@@ -135,14 +131,14 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
         $totals = array();
         $taxes = $this->cart->getTaxes();
         $total = 0;
-
-        // Because __call can not keep var references so we put them into an array.
+        
+        // Because __call can not keep var references so we put them into an array.             
         $total_data = array(
             'totals' => &$totals,
             'taxes'  => &$taxes,
             'total'  => &$total
         );
-
+        
         $this->getTotals($total_data);
 
         return $total > 0;
@@ -374,7 +370,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
         return $amazon_payment_js . '?sellerId=' . $this->config->get('payment_amazon_login_pay_merchant_id');
     }
 
-    public function submitOrderDetails($order_reference_id, $order_id, $currency_code, $text_version) {
+    public function submitOrderDetails($order_reference_id, $order_id) {
         $this->load->model('checkout/order');
 
         $order_info = $this->model_checkout_order->getOrder($order_id);
@@ -385,21 +381,17 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 
         return $this->postCurl("SetOrderReferenceDetails", array(
             'AmazonOrderReferenceId' => $order_reference_id,
-            'OrderReferenceAttributes.OrderTotal.CurrencyCode' => $currency_code,
-            'OrderReferenceAttributes.OrderTotal.Amount' => $this->currency->convert($order_info['total'], $this->config->get('config_currency'), $currency_code),
+            'OrderReferenceAttributes.OrderTotal.CurrencyCode' => $this->config->get('payment_amazon_login_pay_payment_region'),
+            'OrderReferenceAttributes.OrderTotal.Amount' => $this->currency->convert($order_info['total'], $this->config->get('config_currency'), $this->config->get('payment_amazon_login_pay_payment_region')),
             'OrderReferenceAttributes.PlatformId' => $this->getPlatformId(),
             'OrderReferenceAttributes.SellerOrderAttributes.SellerOrderId' => $order_id,
-            'OrderReferenceAttributes.SellerOrderAttributes.StoreName' => $order_info['store_name'],
-            'OrderReferenceAttributes.SellerOrderAttributes.CustomInformation' => $text_version
+            'OrderReferenceAttributes.SellerOrderAttributes.StoreName' => $order_info['store_name']
         ));
     }
 
     public function confirmOrder($order_reference_id) {
         $this->postCurl("ConfirmOrderReference", array(
-            'AmazonOrderReferenceId' => $order_reference_id,
-            'SuccessUrl' => $this->url->link('extension/payment/amazon_login_pay/mfa_success', '', true),
-            'FailureUrl' => $this->url->link('extension/payment/amazon_login_pay/mfa_failure', '', true)
-          //  'AuthorizationAmount'=>
+            'AmazonOrderReferenceId' => $order_reference_id
         ));
     }
 
@@ -417,17 +409,6 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
             ->ResponseBody
             ->AuthorizeResult
             ->AuthorizationDetails;
-    }
-
-    public function fetchOrderId($order_reference_id) {
-        return $this->postCurl("GetOrderReferenceDetails", array(
-            'AmazonOrderReferenceId' => $order_reference_id
-        ))
-            ->ResponseBody
-            ->GetOrderReferenceDetailsResult
-            ->OrderReferenceDetails
-            ->SellerOrderAttributes
-            ->SellerOrderId;
     }
 
     public function fetchOrder($order_reference_id) {
@@ -551,12 +532,6 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
         $this->db->query("UPDATE `" . DB_PREFIX . "amazon_login_pay_order` SET `capture_status`=" . (int)$status . " WHERE `amazon_login_pay_order_id`='" . $this->db->escape($amazon_login_pay_order_id) . "'");
     }
 
-    public function findCapture($amazon_capture_id) {
-        $sql = "SELECT * FROM `" . DB_PREFIX . "amazon_login_pay_order_transaction` WHERE amazon_capture_id='" . $this->db->escape($amazon_capture_id) . "'";
-        
-        return $this->db->query($sql)->num_rows > 0;
-    }
-
     public function addTransaction($data) {
         $insert = array(
             'amazon_login_pay_order_id' => (int)$data['amazon_login_pay_order_id'],
@@ -625,25 +600,6 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
     public function updateStatus($amazon_id, $type, $status) {
         $this->db->query("UPDATE `" . DB_PREFIX . "amazon_login_pay_order_transaction` SET `status` = '" . $this->db->escape($status) . "' WHERE `amazon_" . $type . "_id` = '" . $this->db->escape($amazon_id) . "' AND `type` = '" . $this->db->escape($type) . "'");
     }
-    public function findOCOrderId($amazon_authorization_id) {
-        $sql = "SELECT * FROM `" . DB_PREFIX . "amazon_login_pay_order` WHERE amazon_order_reference_id='" . $this->db->escape($amazon_authorization_id) . "'";
-        $result = $this->db->query($sql);
-        if ($result->num_rows > 0) {
-          return (int) $result->row['order_id'];
-        }
-    }
-    public function findAOrderId($amazon_authorization_id) {
-        $sql = "SELECT * FROM `" . DB_PREFIX . "amazon_login_pay_order` WHERE amazon_order_reference_id='" . $this->db->escape($amazon_authorization_id) . "'";
-        $result = $this->db->query($sql);
-        if ($result->num_rows > 0) {
-          return (int) $result->row['amazon_login_pay_order_id'];
-        }
-    }
-    public function getTotalCaptured($amazon_login_pay_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "amazon_login_pay_order_transaction` WHERE `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "' AND (`type` = 'capture' OR `type` = 'refund') AND (`status` = 'Completed' OR `status` = 'Closed')");
-
-		return (double)$query->row['total'];
-	}
 
     public function authorizationIpn($xml) {
         $status = (string)$xml->AuthorizationDetails->AuthorizationStatus->State;
@@ -652,7 +608,6 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
         if ($status == 'Declined' || $status == 'Closed') {
             $this->debugLog("NOTICE", $status . ': ' . (string)$xml->AuthorizationDetails->AuthorizationStatus->ReasonCode);
         }
-        return ($status == 'Closed' && $xml->AuthorizationDetails->AuthorizationStatus->ReasonCode == 'MaxCapturesProcessed');
     }
 
     public function captureIpn($xml) {

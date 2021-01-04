@@ -31,7 +31,9 @@ class ModelExtensionShippingWeight extends Model {
 
 					if ($data[0] >= $weight) {
 						if (isset($data[1])) {
-							$cost = $data[1];
+							//$cost = $data[1];
+							$cost = $data[1] * $weight;
+							$cost += $data[2];
 						}
 
 						break;

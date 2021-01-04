@@ -36,7 +36,7 @@ define("IS_HTTPS", FALSE);
 /**
  * 
  */
-define("DYO_BASE_DIR", str_replace( "/admin/", "/catalog/", DIR_APPLICATION ));
+define("DYO_BASE_DIR", dirname(constant('DIR_APPLICATION')).'/catalog/');
 
 function loadDesignYourOwnCommons()
 {
