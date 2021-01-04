@@ -11,6 +11,17 @@ class ModelAccountCustomerToken extends Model {
 	    $etime = time() + 86400;
 		$res = $this->db->query("insert into " . DB_PREFIX . "customer_token(`uid`,`token`,`etime`) values('{$uid}','{$token}',{$etime})");
 
-		return $res;
+		return $token;
 	}
+
+	public function checkToken($token){
+	    $tokenInfo = $this->getUidByToken($token);
+	    if (empty($tokenInfo)){
+	        return false;
+        }
+	    if ($tokenInfo['etime'] < time()){
+	        return false;
+        }
+	    return $tokenInfo['uid'];
+    }
 }

@@ -48,4 +48,14 @@ class Request {
 
 		return $data;
 	}
+
+	public function getParam($key, $default = ''){
+	    if (isset($this->get[$key])){
+	        return $this->get[$key];
+        }
+        if (isset($this->post[$key])){
+            return $this->port[$key];
+        }
+        return $default;
+    }
 }

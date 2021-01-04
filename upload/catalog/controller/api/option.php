@@ -3,6 +3,16 @@ class ControllerApiOption extends Controller {
 
 	public function index() {
 
+        //校验token
+        $this->load->model('account/customer_token');
+        $uid = $this->model_account_customer_token->checkToken($this->request->getParam('token'));
+        if (!$uid){
+            $this->response->addHeader('Content-Type: application/json');
+            $result = ['status' => 403, 'msg'=>'权限不足'];
+            $this->response->setOutput(json_encode($result));
+            return;
+        }
+
 		if (isset($this->request->get['model'])) {
             $category_id = (int)$this->request->get['model'];
         } else {

@@ -181,7 +181,8 @@ class ControllerAccountLogin extends Controller {
 		}
 		//增加token
         $this->load->model('account/customer_token');
-		$res = $this->model_account_customer_token->addUserToken($customer_info['customer_id']);
+		$token = $this->model_account_customer_token->addUserToken($customer_info['customer_id']);
+		setcookie('u_token',$token, time()+86400,'/');
 
 		return !$this->error;
 	}
