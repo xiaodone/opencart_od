@@ -11,7 +11,7 @@ class ModelExtensionPcbi extends Model {
     
     public function getoption() {
         $data['option'] = array();
-        $sql = "SELECT * FROM " . DB_PREFIX . "option_description where language_id=5";
+        $sql = "SELECT * FROM " . DB_PREFIX . "option_description";
         $option=$this->db->query($sql);
         
         return $option;
@@ -27,7 +27,7 @@ class ModelExtensionPcbi extends Model {
     }
     public function getProduct_option_value_id() {
         $data['option'] = array();
-        $product_option_value=$this->db->query("SELECT * FROM " . DB_PREFIX . "option_value_description where language_id=5 and option_id=5");
+        $product_option_value=$this->db->query("SELECT * FROM " . DB_PREFIX . "option_value_description");
         
         return $product_option_value;
         
