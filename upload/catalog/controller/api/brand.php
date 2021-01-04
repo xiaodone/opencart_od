@@ -40,6 +40,7 @@ class ControllerApiBrand extends Controller {
 		}
 
 		$this->response->addHeader('Content-Type: application/json');
-		$this->response->setOutput(json_encode($data));
+        $result = ['status' => 200, 'data' => $data];
+		$this->response->setOutput(json_encode($result));
 	}
 }

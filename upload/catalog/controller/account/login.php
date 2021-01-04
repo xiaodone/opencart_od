@@ -179,6 +179,9 @@ class ControllerAccountLogin extends Controller {
 				$this->model_account_customer->deleteLoginAttempts($this->request->post['email']);
 			}
 		}
+		//增加token
+        $this->load->model('account/customer_token');
+		$res = $this->model_account_customer_token->addUserToken($customer_info['customer_id']);
 
 		return !$this->error;
 	}
