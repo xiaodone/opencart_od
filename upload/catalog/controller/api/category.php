@@ -24,7 +24,7 @@ class ControllerApiCategory extends Controller {
 				$tmpdata = [];
 				$tmpdata['id'] = $category['category_id'];
 				$tmpdata['name'] = $category['name'];
-				$tmpdata['icon'] = $category['image'];
+				$tmpdata['icon'] = $this->model_tool_image->resize($category['image'], 200, 200);
 				/*$tmpdata['products'] = [];
 				$products = $this->model_catalog_product->getProducts(['filter_category_id' => $category['category_id']]);
 				if(!empty($products) && is_array($products)){
