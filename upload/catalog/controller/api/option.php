@@ -5,13 +5,13 @@ class ControllerApiOption extends Controller {
 
         //校验token
         $this->load->model('account/customer_token');
-        $uid = $this->model_account_customer_token->checkToken($this->request->getParam('token'));
-        if (!$uid){
-            $this->response->addHeader('Content-Type: application/json');
-            $result = ['status' => 403, 'msg'=>'权限不足'];
-            $this->response->setOutput(json_encode($result));
-            return;
-        }
+        // $uid = $this->model_account_customer_token->checkToken($this->request->getParam('token'));
+        // if (!$uid){
+        //     $this->response->addHeader('Content-Type: application/json');
+        //     $result = ['status' => 403, 'msg'=>'权限不足'];
+        //     $this->response->setOutput(json_encode($result));
+        //     return;
+        // }
 
 		if (isset($this->request->get['model'])) {
             $category_id = (int)$this->request->get['model'];
@@ -23,13 +23,13 @@ class ControllerApiOption extends Controller {
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
+		$this->load->model('catalog/diytype');
 
 		$category = $this->model_catalog_category->getCategory($category_id);
 		$data = [];
 		$products = $this->model_catalog_product->getProducts(['filter_category_id' => $category['category_id']]);
 		if(!empty($products) && is_array($products)){
 			foreach($products as $product){
-				var_dump($product);exit;
 				$tmpproduct = [];
 				$tmpproduct['id'] = $product['product_id'];
 				$tmpproduct['name'] = $product['name'];

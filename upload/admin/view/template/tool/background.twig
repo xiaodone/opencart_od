@@ -1,0 +1,180 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  
+
+<div style="margin:20px;">
+
+	<button type="button" onclick="add({id:0, groupid:0})" class="layui-btn">新增</button>
+	<table id="demo" lay-filter="test"></table>	
+  <div id="form" style="display:none">
+<form class="layui-form" lay-filter="formTest" onsubmit="return false">
+
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">列表图片</label>
+    <div class="layui-input-block">
+    <a href="" id="thumb-image1" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="file" value="" id="input_image1" />
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">整体背景图</label>
+    <div class="layui-input-block">
+    <a href="" id="thumb-image2" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="background" value="" id="input_image2" />
+    <p>没有可不传</p>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">组</label>
+    <div class="layui-input-block">
+      <select name="groupid" lay-verify="required" lay-filter="groupid" onchange="selectGroup()">
+        <option value="0">请选择</option>
+        {% for key, group in groupList %}
+        <option value="{{key}}" data-num="{{group.num}}">{{group.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="diyimage">
+
+  </div>
+  
+  
+  <input type="hidden" name="id" />
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <span class="layui-btn" lay-submit lay-filter="formDemo">立即提交</span>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</div>
+</div></div>
+<link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.7/css/layui.min.css">
+
+<script src="https://cdn.staticfile.org/layui/2.5.7/layui.min.js"></script>
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  
+</script>
+
+<script>
+var groupList = {{ groupList|json_encode() }}
+layui.use(['table', 'form', 'upload', 'layer'], function(){
+  var form = layui.form;
+  
+  form.on('submit(formDemo)', function(data){
+    post(data)
+    
+    return false;
+  });
+  form.on('select', function(e){
+    var group = groupList[e.value]
+    var html = '<p class="titlep">已下图片是分割的默认图片，可以全部传 也可以不传</p>'
+    for(var i=1;i<=group.num;i++){
+      html += '<div class="layui-form-item layui-form-text"><label class="layui-form-label">图片'+i+'</label><div class="layui-input-block"><a href="" id="thumbimage'+i+'" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="inthumb['+i+']" value="" id="inputimage'+ i +'" /></div></div>'
+
+    }
+    $('.diyimage').html(html)
+  });
+
+  
+  var table = layui.table;
+  
+  //第一个实例
+  table.render({
+    elem: '#demo'
+    ,height: 412
+    ,url: window.location.href + '&ajax=1' //数据接口
+    ,page: false //开启分页
+    ,cols: [[ //表头
+      {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+      ,{field: 'thumb', title: '图片', width:400, templet: function(d){
+      return '<img src="'+d.thumb+'" />';
+      }}
+      ,{field: 'group', title: '组', width:400}
+      ,{fixed: 'right', title: '操作',  align:'center', toolbar: '#barDemo'}
+    ]]
+  });
+
+  table.on('tool(test)', function(obj){
+    var data = obj.data; //获得当前行数据
+    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+    var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+   
+    if(layEvent === 'detail'){ //查看
+      console.log(data)
+    } else if(layEvent === 'del'){ //删除
+      layer.confirm('真的删除行么', function(index){
+        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+        
+        //向服务端发送删除指令
+        $.post('index.php?route=tool/diy_upload/delete&user_token={{ user_token }}&id=' + data.id, {}, function(res){
+            layer.msg('删除成功')
+            layer.close(index);
+        })
+      });
+    } else if(layEvent === 'edit'){ //编辑
+      $('#thumb-image1 img').attr('src', data.thumb)
+      if(data.background)$('#thumb-image2 img').attr('src', data.backgrounds)
+      var group = groupList[data.groupid]
+      var html = ''
+      for(var i=1;i<=group.num;i++){
+        var info = data.inthumb[i]
+        console.log(info)
+        if(info) {
+          html += '<div class="layui-form-item layui-form-text"><label class="layui-form-label">图片'+i+'</label><div class="layui-input-block"><a href="" id="thumbimage'+i+'" data-toggle="image" class="img-thumbnail"><img src="'+info.url+'" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="inthumb['+i+']" value="'+info.thumb+'" id="inputimage'+ i +'" /></div></div>'
+        }else{
+          html += '<div class="layui-form-item layui-form-text"><label class="layui-form-label">图片'+i+'</label><div class="layui-input-block"><a href="" id="thumbimage'+i+'" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="inthumb['+i+']" value="" id="inputimage'+ i +'" /></div></div>'
+        }
+        
+      }
+      $('.diyimage').html(html)
+      
+      add(data)
+    } else if(layEvent === 'LAYTABLE_TIPS'){
+      layer.alert('Hi，头部工具栏扩展的右侧图标。');
+    }
+  });
+      
+  
+});
+function add(obj){
+  var form = layui.form;
+  if(obj.id == 0) {
+    $('#thumb-image1 img').attr('src', 'http://opencart.hfyggy.com/image/cache/no_image-100x100.png')
+    $('.diyimage').html('')
+  }
+  form.val("formTest", obj);
+  layer.open({
+    area: ['640px', '600px'],
+    type: 1,
+    content: $('#form') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+  });
+}
+
+function post(data){
+  $.post('index.php?route=tool/diy_upload/save&user_token={{ user_token }}', data.field, function(){
+      layer.msg('保存成功', {
+      icon: 1,
+      time: 2000 //2秒关闭（如果不配置，默认是3秒）
+    }, function(){
+      window.location.reload();
+    }); 
+     
+  })
+}
+</script>
+
+<script type="text/html" id="titleimg">
+  <img src="{{d.img}}" />
+</script>
+<style>
+#modal-image{z-index:9999900000}
+.titlep{
+  text-align: center;
+    font-size: 17px;
+    border-bottom: 1px solid #ccc;
+    margin: 20px auto;
+}
+</style>
+{{ footer }}

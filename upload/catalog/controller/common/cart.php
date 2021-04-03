@@ -93,10 +93,13 @@ class ControllerCommonCart extends Controller {
 				$price = false;
 				$total = false;
 			}
+			if(!empty($product['image_code']))$image = $product['image_code'];
 
 			$data['products'][] = array(
 				'cart_id'   => $product['cart_id'],
 				'thumb'     => $image,
+				'image_code'=> $product['image_code'],
+				'type'=> $product['type'],
 				'name'      => $product['name'],
 				'model'     => $product['model'],
 				'option'    => $option_data,

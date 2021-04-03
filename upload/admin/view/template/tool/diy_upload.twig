@@ -36,8 +36,9 @@
               <label class="control-label" for="groupid">分组</label>
 			  <select name="groupid" id="groupid" class="form-control">
 			    <option value="">选择分组</option>
-				<option value="1">图案</option>
-				<option value="2">背景</option>
+          {% for key, group in groupList %}
+				<option value="{{key}}">{{group}}</option>
+        {% endfor %}
 			  </select>
             </div>
             <!--div class="form-group">
@@ -176,9 +177,13 @@ $('.date').datetimepicker({
 var image_row = 1;
 
 function addImage() {
+var option = ''
+{% for key, group in groupList %}
+        option += '<option value="{{key}}">{{group}}</option>'
+        {% endfor %}
 	html = '<tr id="image-row' + image_row + '">';
 	html += '  <td class="text-left"><a href="" id="thumb-image' + image_row + '"data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" dat     a-placeholder="{{ placeholder }}" /></a><input type="hidden" name="input_image' + image_row + '" value="" id="input_image' + image_row + '" /></td>';
-	html += '  <td class="text-right"><select name="image_groupid' + image_row + '" id="image_groupid' + image_row + '" class="form-control"><option value="">选择分组</option><option value="1">图案</option><option value="2">背景</option></select></td>';
+	html += '  <td class="text-right"><select name="image_groupid' + image_row + '" id="image_groupid' + image_row + '" class="form-control"><option value="">选择分组</option>'+option+'</select></td>';
 	html += '  <td class="text-left"><button type="button" onclick="saveUpload(' + image_row + ');" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button></td>';
 	html += '</tr>';
 

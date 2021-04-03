@@ -4,14 +4,14 @@ class ControllerApiModel extends Controller {
 	public function index() {
 
         //校验token
-        $this->load->model('account/customer_token');
+        /*$this->load->model('account/customer_token');
         $uid = $this->model_account_customer_token->checkToken($this->request->getParam('token'));
         if (!$uid){
             $this->response->addHeader('Content-Type: application/json');
             $result = ['status' => 403, 'msg'=>'权限不足'];
             $this->response->setOutput(json_encode($result));
             return;
-        }
+		}*/
 
 		if (isset($this->request->get['brand'])) {
             $category_id = (int)$this->request->get['brand'];
@@ -29,6 +29,8 @@ class ControllerApiModel extends Controller {
 			foreach($categorys as $category){
 				$tmpdata = [];
 				$tmpdata['id'] = $category['category_id'];
+				//获取该分类下面第一个产品的ID
+				$tmpdata['product_id'] = $this->model_catalog_category->getFirstProductIdByCategoryId($category['category_id']);
 				$tmpdata['name'] = $category['name'];
 				//$tmpdata['icon'] = $category['image'];
 				/*$tmpdata['products'] = [];

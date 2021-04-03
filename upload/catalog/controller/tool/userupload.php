@@ -4,13 +4,13 @@ class ControllerToolUserupload extends Controller {
 		$this->load->language('tool/upload');
 
 		$json = array();
-		$uid = (int)$this->request->post['uid'];
-		if($uid < 1){
-			$json['error'] = '用户id不正确';
-			$this->response->addHeader('Content-Type: application/json');
-			$this->response->setOutput(json_encode($json));
-		}
-
+		// $uid = (int)$this->request->post['uid'];
+		// if($uid < 1){
+		// 	$json['error'] = '用户id不正确';
+		// 	$this->response->addHeader('Content-Type: application/json');
+		// 	$this->response->setOutput(json_encode($json));
+		// }
+		$uid = 100000;
 		if (!empty($this->request->files['file']['name']) && is_file($this->request->files['file']['tmp_name'])) {
 			// Sanitize the filename
 			$filename = basename(preg_replace('/[^a-zA-Z0-9\.\-\s+]/', '', html_entity_decode($this->request->files['file']['name'], ENT_QUOTES, 'UTF-8')));
@@ -92,6 +92,13 @@ class ControllerToolUserupload extends Controller {
 				$json['error'] = 'save failed';
 			}
 		}
+		$json['data'] = [
+            'title'=> '',
+            'extension'=> '',
+            'file'=> $urlPre . $file,
+            'created_at'=> date('Y-m-d H:i:s')
+        ];
+
 
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));

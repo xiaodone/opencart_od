@@ -1,8 +1,12 @@
 <?php
 class ModelToolDiyUpload extends Model {
-	public function addUpload($groupid, $file) {
-
-		$res = $this->db->query("INSERT INTO `" . DB_PREFIX . "diy_upload` SET groupid='" .(int)$groupid ."', `file` = '" . $this->db->escape($file) ."'");
+	public function addUpload($id, $groupid, $file, $inthumb, $background) {
+		if($id >0 ) {
+			$res = $this->db->query("update `" . DB_PREFIX . "diy_upload` SET groupid='" .(int)$groupid ."', `file` = '" . $this->db->escape($file) ."' , inthumb = '".$inthumb."', `background` = '" . $this->db->escape($background) ."'  where id =".(int)$id);
+		}else{
+			$res = $this->db->query("INSERT INTO `" . DB_PREFIX . "diy_upload` SET groupid='" .(int)$groupid ."', `file` = '" . $this->db->escape($file) ."' , `background` = '" . $this->db->escape($background) ."' , inthumb = '".$inthumb."'");
+		}
+		
 
 		return $res;
 	}

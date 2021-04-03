@@ -720,4 +720,6 @@ class ModelCatalogProduct extends Model {
 
 		return $query->row['total'];
 	}
+
+
 }

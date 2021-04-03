@@ -129,13 +129,15 @@ class ControllerCheckoutCart extends Controller {
 						$recurring .= sprintf($this->language->get('text_payment_cancel'), $this->currency->format($this->tax->calculate($product['recurring']['price'] * $product['quantity'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']), $product['recurring']['cycle'], $frequencies[$product['recurring']['frequency']], $product['recurring']['duration']);
 					}
 				}
-
+// var_dump($product);die;
 				$data['products'][] = array(
 					'cart_id'   => $product['cart_id'],
-					'thumb'     => $image,
+					'thumb'     => $product['image'],
+					'type'     => $product['type'],
 					'name'      => $product['name'],
 					'model'     => $product['model'],
 					'option'    => $option_data,
+					'type'    => $product['type'],
 					'recurring' => $recurring,
 					'quantity'  => $product['quantity'],
 					'stock'     => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),

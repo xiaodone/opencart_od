@@ -66,4 +66,14 @@ class ModelCatalogCategory extends Model {
 
 		return $query->row['total'];
 	}
+
+
+	public function getFirstProductIdByCategoryId($category_id = 0){
+		$query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "product_to_category  WHERE category_id = '" . (int)$category_id . "' order by product_id desc");
+		if ($query->row) {
+			return (int)$query->row['product_id'];
+		} else {
+			return 0;
+		}
+	}
 }

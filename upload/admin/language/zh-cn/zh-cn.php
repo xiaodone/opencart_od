@@ -126,6 +126,7 @@ $_['tab_ftp']                       = 'FTP';
 $_['tab_ip']                        = 'IP 地址';
 $_['tab_links']                     = '链接';
 $_['tab_log']                       = '日志';
+$_['tab_diy']                     	= 'DIY模型';
 $_['tab_image']                     = '图片设置';
 $_['tab_option']                    = '选项设置';
 $_['tab_server']                    = '服务器设置';

@@ -46,4 +46,13 @@ class ModelToolImage extends Model {
 			return $this->config->get('config_url') . 'image/' . $image_new;
 		}
 	}
+
+	public function imageUrl($url){
+		if(empty($url)) return $url;
+		if ($this->request->server['HTTPS']) {
+			return $this->config->get('config_ssl') . 'image/' . $url;
+		} else {
+			return $this->config->get('config_url') . 'image/' . $url;
+		}
+	}
 }

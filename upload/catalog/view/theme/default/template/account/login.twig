@@ -11,7 +11,9 @@
   {% if error_warning %}
   <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
   {% endif %}
-  <div class="row">{{ column_left }}
+  <div class="row">
+    
+    {{ column_left }}
     {% if column_left and column_right %}
     {% set class = 'col-sm-6' %}
     {% elseif column_left or column_right %}
@@ -19,8 +21,13 @@
     {% else %}
     {% set class = 'col-sm-12' %}
     {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
+    
+    <div id="content" class="{{ class }}">
+      
+      {{ content_top }}
+      
       <div class="row">
+        
         <div class="col-sm-6">
           <div class="well">
             <h2>{{ text_new_customer }}</h2>
@@ -28,6 +35,7 @@
             <p>{{ text_register_account }}</p>
             <a href="{{ register }}" class="btn btn-primary">{{ button_continue }}</a></div>
         </div>
+        
         <div class="col-sm-6">
           <div class="well">
             <h2>{{ text_returning_customer }}</h2>
@@ -49,7 +57,13 @@
           </div>
         </div>
       </div>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
+      
+      {{ content_bottom }}
+      
+      </div>
+      
+    {{ column_right }}
+    
+    </div>
 </div>
 {{ footer }}

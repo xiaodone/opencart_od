@@ -36,13 +36,16 @@ class ControllerToolDiyUpload extends Controller {
 			$id = (int)$this->request->get['id'];	
 			$res = $this->model_tool_diy_upload->deleteUpload($id);
 			if($res){
-				echo 'success';
+				return $this->response->setOutput(json_encode([
+					'code'=> 0,
+				]));
 			}
 			else {
-				echo 'failed';
+				return $this->response->setOutput(json_encode([
+					'code'=> 0,
+				]));
 			}
 		}
-		exit;
 	}
 
 	public function save(){
@@ -53,9 +56,12 @@ class ControllerToolDiyUpload extends Controller {
 		$this->load->model('tool/diy_upload');
 		if(!empty($this->request->post) && is_file(DIR_IMAGE . $this->request->post['file'])){
 			$file = $this->request->post['file'];
+			$background = $this->request->post['background'];
+			$inthumb = json_encode($this->request->post['inthumb']);
 			$groupid = (int)$this->request->post['groupid'];
+			$id = (int)$this->request->post['id'];
 			if(!empty($file) && $groupid>0){
-				$res = $this->model_tool_diy_upload->addUpload($groupid, $file);
+				$res = $this->model_tool_diy_upload->addUpload($id, $groupid, $file, $inthumb, $background);
 				if($res){
 					echo 'success';
 					exit;
@@ -119,16 +125,76 @@ class ControllerToolDiyUpload extends Controller {
 		$results = $this->model_tool_diy_upload->getUploads($groupid, ($page -1) * $pagesize, $pagesize);
 
 		$groupList = array(
-			'1' => '图案',
-			'2' => '背景',
+			'1' => [
+				'name'=> '分割1',
+				'num'=> 1,
+			],
+			'2' => [
+				'name'=> '分割2',
+				'num'=> 2,
+			],
+			'3' => [
+				'name'=> '分割3',
+				'num'=> 3,
+			],
+			'4' => [
+				'name'=> '中间四方',
+				'num'=> 1,
+			],
+			'6' => [
+				'name'=> '中间圆形',
+				'num'=> 1,
+			],
+			'7' => [
+				'name'=> '分割8',
+				'num'=> 8,
+			],
+			'8' => [
+				'name'=> '分割6',
+				'num'=> 6,
+			],
+			'9' => [
+				'name'=> '2-8分割6',
+				'num'=> 6,
+			],
 		);
-
 		foreach ($results as $result) {
+			$inthumb = json_decode($result['inthumb']);
+			$arr = [];
+			if($inthumb) {
+				foreach ($inthumb as $key=>$value) {
+					if(!$value) {
+						$arr[$key] = '';
+					}else{
+						$arr[$key] = [
+							'url'=>  $this->model_tool_image->resize( $value, 100,100),
+							'thumb'=> $value
+						];
+					}
+					
+				}
+			}
+			
 			$data['uploads'][] = array(
 				'id'  => $result['id'],
-				'group'   => $groupList[$result['groupid']],
-				'img'   => $this->model_tool_image->resize( $result['file'], 100,100),
+				'groupid'   => $result['groupid'],
+				'inthumb'   => $arr,
+				'group'   => $groupList[$result['groupid']]['name'],
+				'file'   => ( $result['file']),
+				'thumb'   => $this->model_tool_image->resize( $result['file'], 100,100),
+				'background'   => $result['background'],
+				'backgrounds'   => $this->model_tool_image->resize( $result['background'], 100,100),
 			);
+		}
+		$data['groupList'] = $groupList;
+
+		if(isset($this->request->get['ajax']) && $this->request->get['ajax'] == 1) {
+			return $this->response->setOutput(json_encode([
+				'code'=> 0,
+				'msg'=> '',
+				'count'=> $upload_total,
+				'data'=> $data['uploads']
+			]));
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -167,8 +233,9 @@ class ControllerToolDiyUpload extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('tool/diy_upload', $data));
+		$this->response->setOutput($this->load->view('tool/background', $data));
 	}
+
 
 	protected function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'tool/diy_upload')) {

@@ -536,4 +536,11 @@ class ModelCatalogProduct extends Model {
 			return 0;
 		}
 	}
+
+
+	public function getProductDiys($product_id) {
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_diy WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC");
+
+		return $query->rows;
+	}
 }

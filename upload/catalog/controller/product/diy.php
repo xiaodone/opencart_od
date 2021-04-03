@@ -1,6 +1,8 @@
 <?php
 class ControllerProductDiy extends Controller {
 	public function index() {
+		header('Location:/div-mobile/');
+		return;
 		$data = [];
 		$this->load->model('account/customer');
 		if ($this->customer->isLogged()) {
